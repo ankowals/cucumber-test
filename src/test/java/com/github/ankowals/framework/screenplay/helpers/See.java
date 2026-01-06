@@ -3,7 +3,7 @@ package com.github.ankowals.framework.screenplay.helpers;
 import com.github.ankowals.framework.screenplay.Consequence;
 import com.github.ankowals.framework.screenplay.Question;
 import com.github.ankowals.framework.screenplay.abilities.AwaitPatiently;
-import com.github.ankowals.framework.screenplay.actor.use.UseAbility;
+import com.github.ankowals.framework.screenplay.helpers.use.UseAbility;
 import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Predicate;

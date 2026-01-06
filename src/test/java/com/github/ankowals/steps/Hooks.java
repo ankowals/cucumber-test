@@ -10,7 +10,7 @@ import com.github.ankowals.framework.screenplay.abilities.cleanup.OnTeardownActi
 import com.github.ankowals.framework.screenplay.abilities.memory.Memory;
 import com.github.ankowals.framework.screenplay.abilities.memory.RememberThings;
 import com.github.ankowals.framework.screenplay.actor.Actor;
-import com.github.ankowals.framework.screenplay.actor.use.UseAbility;
+import com.github.ankowals.framework.screenplay.helpers.use.UseAbility;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import java.time.Duration;

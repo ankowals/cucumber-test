@@ -1,4 +1,4 @@
-package com.github.ankowals.framework.screenplay.actor.use;
+package com.github.ankowals.framework.screenplay.helpers.use;
 
 class NoMatchingAbilityException extends RuntimeException {
   <T> NoMatchingAbilityException(Class<? extends T> ability) {

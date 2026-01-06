@@ -3,7 +3,7 @@ package com.github.ankowals.framework.screenplay.helpers;
 import com.github.ankowals.framework.screenplay.Interaction;
 import com.github.ankowals.framework.screenplay.Question;
 import com.github.ankowals.framework.screenplay.abilities.AwaitPatiently;
-import com.github.ankowals.framework.screenplay.actor.use.UseAbility;
+import com.github.ankowals.framework.screenplay.helpers.use.UseAbility;
 import java.util.concurrent.Callable;
 import java.util.function.Predicate;
 import org.hamcrest.Matcher;

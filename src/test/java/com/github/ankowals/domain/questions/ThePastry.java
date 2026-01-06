@@ -4,7 +4,7 @@ import com.github.ankowals.domain.CallPastryService;
 import com.github.ankowals.domain.model.Pastry;
 import com.github.ankowals.framework.client.Expect;
 import com.github.ankowals.framework.screenplay.Question;
-import com.github.ankowals.framework.screenplay.actor.use.UseAbility;
+import com.github.ankowals.framework.screenplay.helpers.use.UseAbility;
 import org.apache.http.HttpStatus;
 
 public class ThePastry {

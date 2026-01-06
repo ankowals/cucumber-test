@@ -1,7 +1,7 @@
 package com.github.ankowals.framework.screenplay.abilities.memory;
 
 import com.github.ankowals.framework.screenplay.Interaction;
-import com.github.ankowals.framework.screenplay.actor.use.UseAbility;
+import com.github.ankowals.framework.screenplay.helpers.use.UseAbility;
 
 public class Forget {
   public static Interaction valueOf(String name, Class<?> type) {

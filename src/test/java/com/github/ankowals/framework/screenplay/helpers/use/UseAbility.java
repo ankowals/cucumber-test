@@ -1,4 +1,4 @@
-package com.github.ankowals.framework.screenplay.actor.use;
+package com.github.ankowals.framework.screenplay.helpers.use;
 
 import com.github.ankowals.framework.screenplay.Ability;
 import com.github.ankowals.framework.screenplay.actor.Actor;
