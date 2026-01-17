@@ -8,8 +8,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.lang3.function.Failable;
-import org.assertj.core.api.Assertions;
-import org.assertj.core.api.ObjectAssert;
 
 public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbilities {
 
@@ -41,10 +39,5 @@ public class Actor implements PerformsInteractions, PerformsChecks, ManagesAbili
   public void should(Consequence... consequences) throws Exception {
     Failable.stream(Arrays.asList(consequences))
         .forEach(consequence -> consequence.evaluateFor(this));
-  }
-
-  @Override
-  public <T> ObjectAssert<T> should(Question<T> question) throws Exception {
-    return Assertions.assertThat(this.asksFor(question));
   }
 }

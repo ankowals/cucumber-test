@@ -1,6 +1,6 @@
 package com.github.ankowals.framework.screenplay.abilities.memory;
 
-class NoObjectToRecallException extends RuntimeException {
+public class NoObjectToRecallException extends RuntimeException {
   NoObjectToRecallException(String name) {
     super(
         String.format(

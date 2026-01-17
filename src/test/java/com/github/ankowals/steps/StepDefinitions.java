@@ -13,19 +13,14 @@ import com.github.ankowals.framework.screenplay.helpers.use.UseAbility;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.util.List;
-import org.assertj.core.api.InstanceOfAssertFactories;
+import org.assertj.core.api.Assertions;
 
 public record StepDefinitions(Actor actor) {
 
   @Given("I can access pastry service")
   public void iCanAccessPastryService() throws Exception {
-    List<Pastry> pastries = this.actor.asksFor(ThePastries.all());
-
-    this.actor
-        .should(See.that(pastries))
-        .asInstanceOf(InstanceOfAssertFactories.list(Pastry.class))
-        .isNotEmpty();
+    this.actor.should(
+        See.that(ThePastries.all(), pastries -> Assertions.assertThat(pastries).isNotEmpty()));
   }
 
   @When("I ask about availability of pastry {string}")
@@ -43,8 +38,10 @@ public record StepDefinitions(Actor actor) {
 
   @Then("I should be told it is available")
   public void iShouldBeToldItIsAvailable() throws Exception {
-    this.actor
-        .should(See.that(TheRemembered.valueOf("pastry", Pastry.class)))
-        .returns(Pastry.Status.AVAILABLE, Pastry::status);
+    this.actor.should(
+        See.that(
+            TheRemembered.valueOf("pastry", Pastry.class),
+            value ->
+                Assertions.assertThat(value).returns(Pastry.Status.AVAILABLE, Pastry::status)));
   }
 }

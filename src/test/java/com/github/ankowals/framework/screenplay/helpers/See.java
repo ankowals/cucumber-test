@@ -6,43 +6,40 @@ import com.github.ankowals.framework.screenplay.abilities.AwaitPatiently;
 import com.github.ankowals.framework.screenplay.helpers.use.UseAbility;
 import java.util.Arrays;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
+import org.apache.commons.lang3.function.FailableConsumer;
 import org.apache.commons.lang3.function.FailableSupplier;
 import org.apache.commons.lang3.stream.Streams;
 import org.assertj.core.api.Assert;
+import org.assertj.core.api.Assertions;
 import org.assertj.core.api.HamcrestCondition;
 import org.hamcrest.Matcher;
 
+/**
+ * then(actor).should(See.that(TheRemembered.valueOf("customerId", String.class),
+ * Matchers.is("Tequila123")))
+ */
 public class See {
 
-  /**
-   * then(actor).should(See.that(TheRemembered.valueOf("customerId", String.class),
-   * Matchers.is("Tequila123")))
-   */
-  public static <T> Consequence that(Question<T> question, Matcher<? super T> matcher) {
-    return actor -> actor.should(See.that(question.answeredBy(actor), matcher));
-  }
-
-  public static <T> Consequence that(Question<T> question, Predicate<? super T> predicate) {
-    return actor ->
-        actor.should(See.that(predicate.test(question.answeredBy(actor)))).isEqualTo(Boolean.TRUE);
+  public static <T> Consequence thatActual(T actual, Matcher<? super T> matcher) {
+    return actor -> {
+      Question<T> question = a -> actual;
+      actor.should(See.that(question, matcher));
+    };
   }
 
   @SafeVarargs
-  public static <T> Consequence that(T actual, Matcher<? super T>... matchers) {
-    return actor ->
-        Streams.failableStream(Arrays.stream(matchers))
-            .forEach(
-                matcher -> actor.should(See.that(actual)).is(HamcrestCondition.matching(matcher)));
+  public static <T> Consequence that(Question<T> question, Matcher<? super T>... matchers) {
+    return actor -> {
+      T answer = actor.asksFor(question);
+      Streams.failableStream(Arrays.stream(matchers))
+          .forEach(
+              matcher -> Assertions.assertThat(answer).is(HamcrestCondition.matching(matcher)));
+    };
   }
 
-  // converts value to question
-  public static <T> Question<T> that(T actual) {
-    return actor -> actual;
-  }
-
-  public static <T> Question<T> that(Question<T> question) {
-    return question;
+  public static <T> Consequence that(
+      Question<T> question, FailableConsumer<? super T, Exception> assertConsumer) {
+    return actor -> assertConsumer.accept(actor.asksFor(question));
   }
 
   public static <T> Consequence eventually(Question<T> question, Matcher<? super T> matcher) {
@@ -52,9 +49,12 @@ public class See {
             .conditionFactory()
             .untilAsserted(
                 () ->
-                    actor
-                        .should(See.that(question.answeredBy(actor)))
-                        .is(HamcrestCondition.matching(matcher)));
+                    actor.should(
+                        See.that(
+                            question,
+                            answer ->
+                                Assertions.assertThat(answer)
+                                    .is(HamcrestCondition.matching(matcher)))));
   }
 
   public static <T> Consequence eventually(
