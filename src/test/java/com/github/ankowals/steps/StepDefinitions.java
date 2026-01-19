@@ -5,7 +5,7 @@ import com.github.ankowals.domain.questions.ThePastries;
 import com.github.ankowals.domain.questions.ThePastry;
 import com.github.ankowals.framework.screenplay.abilities.cleanup.DoTheCleanUp;
 import com.github.ankowals.framework.screenplay.abilities.memory.Forget;
-import com.github.ankowals.framework.screenplay.abilities.memory.RememberThat;
+import com.github.ankowals.framework.screenplay.abilities.memory.Or;
 import com.github.ankowals.framework.screenplay.abilities.memory.TheRemembered;
 import com.github.ankowals.framework.screenplay.actor.Actor;
 import com.github.ankowals.framework.screenplay.helpers.See;
@@ -24,8 +24,10 @@ public record StepDefinitions(Actor actor) {
   }
 
   @When("I ask about availability of pastry {string}")
-  public void iAskAboutAvailabilityOfPastry(String name) {
-    this.actor.attemptsTo(RememberThat.valueOf("pastry").is(ThePastry.details(name)));
+  public void iAskAboutAvailabilityOfPastry(String name) throws Exception {
+    // optional step, take it from the memory or ask the SUT
+    this.actor.asksFor(
+        TheRemembered.valueOf("pastry", Pastry.class, Or.askFor(ThePastry.details(name))));
 
     // not really needed but whatever we add to onTeardown actions will be called in after hook
     // can be used to call delete, close driver/connection or stop a container etc.
@@ -33,7 +35,7 @@ public record StepDefinitions(Actor actor) {
     UseAbility.of(this.actor)
         .to(DoTheCleanUp.class)
         .onTeardownActions()
-        .add(() -> Forget.valueOf("pastry", Pastry.class).performAs(this.actor));
+        .add(() -> this.actor.attemptsTo(Forget.valueOf("pastry", Pastry.class)));
   }
 
   @Then("I should be told it is available")

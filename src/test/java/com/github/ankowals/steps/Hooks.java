@@ -19,7 +19,7 @@ import org.awaitility.Awaitility;
 
 public record Hooks(Actor actor) implements UsesPastryService {
 
-  @Before
+  @Before(order = 0)
   public void before() {
     this.actor.can(
         RememberThings.with(new Memory()),

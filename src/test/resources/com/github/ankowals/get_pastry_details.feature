@@ -1,3 +1,4 @@
+@get-pastry-details
 Feature: Get pastry details
 
   Scenario: Client checks pastry availability
