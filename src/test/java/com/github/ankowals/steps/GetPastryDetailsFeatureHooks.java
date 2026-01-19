@@ -21,18 +21,25 @@ public record GetPastryDetailsFeatureHooks(Actor actor) implements UsesPastrySer
   // additional actor used to share the state and clean up at the end
   private static Actor parent;
 
+  private static boolean hasRun = false;
+
   // will be called only before features tagged with value
   // order has to be higher than in Hooks.class
   @Before(order = 1, value = "@get-pastry-details")
   public void before() throws Exception {
-    parent = new Actor();
-    parent.can(
-        RememberThings.with(new Memory()),
-        DoTheCleanUp.with(new OnTeardownActions()),
-        CallPastryService.with(new ApiClient(this.getPastryUrl())));
+    // do stuff before scenarios in a feature only once
+    synchronized (GetPastryDetailsFeatureHooks.class) {
+      if (!hasRun) {
+        parent = new Actor();
+        parent.can(
+            RememberThings.with(new Memory()),
+            DoTheCleanUp.with(new OnTeardownActions()),
+            CallPastryService.with(new ApiClient(this.getPastryUrl())));
 
-    // do stuff before feature
-    this.actor.attemptsTo(RememberThat.valueOf("pastry").is(ThePastry.details("Millefeuille")));
+        this.actor.attemptsTo(RememberThat.valueOf("pastry").is(ThePastry.details("Millefeuille")));
+        hasRun = true;
+      }
+    }
 
     // share the state with the actor injected into steps
     Memory memories = parent.asksFor(TheRemembered.memories());
