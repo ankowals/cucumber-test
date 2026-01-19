@@ -16,7 +16,7 @@ import io.cucumber.java.AfterAll;
 import io.cucumber.java.Before;
 
 // per feature hooks example
-public record FeatureHooks(Actor actor) implements UsesPastryService {
+public record GetPastryDetailsFeatureHooks(Actor actor) implements UsesPastryService {
 
   // additional actor used to share the state and clean up at the end
   private static Actor parent;
